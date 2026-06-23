@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Review Our Sports Club</title>
+    <style>
+        :root { --primary: #2c3e50; --accent: #27ae60; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 20px; text-align: center; max-width: 500px; margin: auto; background-color: #fdfbf7; }
+        h2 { color: var(--primary); }
+        .star-box { margin: 20px 0; }
+        .star { font-size: 45px; cursor: pointer; color: #ccc; transition: color 0.2s; }
+        .star.selected { color: #f39c12; }
+        .option-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; cursor: pointer; background: white; text-align: left; font-size: 14px; transition: 0.2s; }
+        .option-btn:hover { background: #f0f0f0; border-color: #bbb; }
+        #reviewArea { display: none; margin-top: 20px; text-align: left; }
+        #reviewText { width: 100%; height: 100px; margin: 10px 0; padding: 10px; border-radius: 5px; border: 1px solid #ccc; box-sizing: border-box; }
+        .post-btn { width: 100%; padding: 15px; background: var(--accent); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; font-weight: bold; }
+        .instruction { font-size: 0.9em; color: #666; margin-bottom: 10px; }
+    </style>
+</head>
+<body>
+
+    <h2>How was your visit?</h2>
+    <div class="star-box" id="starContainer">
+        <span class="star" onclick="selectStars(1)">★</span>
+        <span class="star" onclick="selectStars(2)">★</span>
+        <span class="star" onclick="selectStars(3)">★</span>
+        <span class="star" onclick="selectStars(4)">★</span>
+        <span class="star" onclick="selectStars(5)">★</span>
+    </div>
+
+    <div id="reviewArea">
+        <p class="instruction">Select a review or write your own:</p>
+        <div id="btnContainer"></div>
+        <textarea id="reviewText" placeholder="Your review will appear here..."></textarea>
+        <button class="post-btn" onclick="postReview()">Copy & Post to Google</button>
+    </div>
+
+    <script>
+        const templates = {
+            5: ["Amazing facilities and top-tier coaches!", "Loved the energy here, will definitely be back!", "The best sports club in town!", "Great atmosphere, highly recommend!"],
+            4: ["Great place to work out, very clean.", "Friendly staff and good equipment.", "Solid experience, would visit again.", "Well-maintained courts and friendly members."],
+            3: ["Decent experience, but could be cleaner.", "Good location, but the place gets crowded.", "Average experience, decent value.", "It's okay, but needs more improvement."],
+            1: ["Not my best experience, equipment was broken.", "Disappointed with the service today.", "Expected more from this facility.", "Facilities were not up to my standard."]
+        };
+
+        function selectStars(count) {
+            document.querySelectorAll('.star').forEach((s, i) => s.className = i < count ? 'star selected' : 'star');
+            document.getElementById('reviewArea').style.display = 'block';
+            const container = document.getElementById('btnContainer');
+            container.innerHTML = '';
+            templates[count].forEach(text => {
+                const btn = document.createElement('div');
+                btn.className = 'option-btn';
+                btn.innerText = text;
+                btn.onclick = () => document.getElementById('reviewText').value = text;
+                container.appendChild(btn);
+            });
+        }
+
+        function postReview() {
+            const review = document.getElementById('reviewText').value;
+            if (!review) { alert("Please select or write a review first."); return; }
+            
+            navigator.clipboard.writeText(review);
+            alert("Review copied! Now, just paste it into the Google review box that opens next.");
+            // REPLACE THIS URL WITH YOUR ACTUAL GOOGLE REVIEW LINK
+            window.open("YOUR_GOOGLE_REVIEW_LINK_HERE", "_blank");
+        }
+    </script>
+</body>
+</html>
